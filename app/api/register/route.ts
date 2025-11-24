@@ -4,7 +4,15 @@ import bcrypt from 'bcryptjs';
 
 export async function POST(req: Request) {
   try {
-    const { name, email, password } = await req.json();
+    let body;
+    try {
+      body = await req.json();
+    } catch (e) {
+      console.error('JSON Parse Error:', e);
+      return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 });
+    }
+
+    const { name, email, password } = body;
 
     if (!email || !password) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
@@ -19,11 +27,22 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ user: result.rows[0] }, { status: 201 });
   } catch (error: unknown) {
-    const err = error as { code?: string };
-    if (err.code === '23505') { // Unique violation
-        return NextResponse.json({ error: 'Email already exists' }, { status: 409 });
+    // Detailed error logging
+    console.error('Registration error details:', error);
+
+    // Type checking for the error object
+    if (typeof error === 'object' && error !== null && 'code' in error) {
+        const err = error as { code: string; message?: string };
+        if (err.code === '23505') { // Unique violation
+            return NextResponse.json({ error: 'Email already exists' }, { status: 409 });
+        }
+        // Log specific DB errors
+        console.error(`DB Error Code: ${err.code}, Message: ${err.message}`);
     }
-    console.error('Registration error:', error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+
+    return NextResponse.json({
+        error: 'Internal Server Error',
+        details: error instanceof Error ? error.message : String(error)
+    }, { status: 500 });
   }
 }
