@@ -17,9 +17,6 @@ const config: Config = {
         background: "#F8F9FA", // Light Grey for cleanliness
         surface: "#FFFFFF",
       },
-      fontFamily: {
-        sans: ['var(--font-geist-sans)', 'sans-serif'],
-      }
     },
   },
   plugins: [],
