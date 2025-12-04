@@ -7,7 +7,7 @@ import Link from 'next/link';
 
 export default function RegisterPage() {
   const router = useRouter();
-  const [formData, setFormData] = useState({ name: '', email: '', password: '' });
+  const [formData, setFormData] = useState({ name: '', email: '', password: '', confirmPassword: '' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -16,11 +16,21 @@ export default function RegisterPage() {
     setLoading(true);
     setError('');
 
+    if (formData.password !== formData.confirmPassword) {
+        setError("Passwords do not match");
+        setLoading(false);
+        return;
+    }
+
     try {
       const res = await fetch('/api/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+            name: formData.name,
+            email: formData.email,
+            password: formData.password
+        }),
       });
 
       const data = await res.json();
@@ -42,22 +52,22 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="max-w-md w-full bg-white p-8 rounded-2xl shadow-xl border border-gray-100">
+    <div className="min-h-screen flex items-center justify-center bg-gray-soft p-4">
+      <div className="max-w-md w-full bg-white p-8 rounded-xl shadow-lg border border-gray-100/50">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-primary mb-2">Create Account</h1>
-          <p className="text-gray-500">Start managing your credentials securely</p>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Create Account</h1>
+          <p className="text-gray-500">Join us to manage credentials securely</p>
         </div>
 
         {error && (
-          <div className="bg-red-50 text-red-600 p-3 rounded-lg text-sm mb-6 text-center">
+          <div className="bg-red-50 text-red-600 p-3 rounded-lg text-sm mb-6 text-center border border-red-100">
             {error}
           </div>
         )}
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="space-y-2">
           <Input
-            label="Name"
+            label="Full Name"
             value={formData.name}
             onChange={(e) => setFormData({...formData, name: e.target.value})}
             required
@@ -79,17 +89,33 @@ export default function RegisterPage() {
             required
             placeholder="••••••••"
           />
-          <Button type="submit" className="w-full mt-2" isLoading={loading}>
-            Register
-          </Button>
+          <Input
+            label="Confirm Password"
+            type="password"
+            value={formData.confirmPassword}
+            onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
+            required
+            placeholder="••••••••"
+          />
+          <div className="pt-4">
+            <Button
+                type="submit"
+                className="w-full hover:scale-105 transition-transform duration-200"
+                isLoading={loading}
+            >
+                Register
+            </Button>
+          </div>
         </form>
 
-        <p className="mt-6 text-center text-sm text-gray-500">
-          Already have an account?{' '}
-          <Link href="/login" className="text-primary hover:underline font-medium">
-            Sign In
-          </Link>
-        </p>
+        <div className="mt-8 pt-6 border-t border-gray-100 text-center">
+          <p className="text-sm text-gray-600">
+            Already have an account?{' '}
+            <Link href="/login" className="text-primary font-medium hover:text-primary-hover hover:underline">
+              Sign In
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );

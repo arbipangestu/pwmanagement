@@ -10,12 +10,15 @@ const config: Config = {
     extend: {
       colors: {
         primary: {
-          DEFAULT: "#C70039", // Elegant Red
-          hover: "#A0002D",
-          light: "#FADBD8",
+          DEFAULT: "#D32F2F", // Red
+          hover: "#B71C1C",   // Darker Red
+          light: "#FFCDD2",   // Light Red for accents if needed
         },
-        background: "#F8F9FA", // Light Grey for cleanliness
+        background: "#FAFAFA", // Very light gray
         surface: "#FFFFFF",
+        gray: {
+            soft: "#F5F5F5",
+        }
       },
     },
   },

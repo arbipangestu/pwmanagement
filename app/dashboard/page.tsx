@@ -69,56 +69,62 @@ export default function Dashboard() {
     }
   };
 
-  if (status === 'loading' || loading) return <div className="flex h-screen items-center justify-center">Loading...</div>;
+  if (status === 'loading' || loading) return <div className="flex h-screen items-center justify-center bg-gray-soft text-primary font-bold">Loading...</div>;
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
+    <div className="flex min-h-screen bg-gray-soft">
       <Sidebar />
-      <main className="ml-64 flex-1 p-8">
-        <div className="flex justify-between items-center mb-8">
+      <main className="ml-64 flex-1">
+        {/* Header */}
+        <div className="bg-white shadow-sm border-b border-gray-100 px-8 py-6 flex justify-between items-center sticky top-0 z-10">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-            <p className="text-gray-500 mt-1">Manage your applications</p>
+            <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
+            <p className="text-gray-500 text-sm mt-0.5">Manage your applications</p>
           </div>
-          <Button onClick={() => setIsModalOpen(true)}>
+          <Button
+            onClick={() => setIsModalOpen(true)}
+            className="hover:scale-105 transition-transform duration-200"
+          >
             <Plus size={20} />
             Add Application
           </Button>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {apps.map((app) => (
-            <div key={app.id} className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
-              <div className="flex justify-between items-start mb-4">
-                <div className="bg-red-50 p-3 rounded-lg">
-                    <span className="text-xl font-bold text-primary">{app.name.charAt(0).toUpperCase()}</span>
+        <div className="p-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {apps.map((app) => (
+                <div key={app.id} className="bg-white rounded-xl shadow-sm border border-gray-100/50 p-6 hover:-translate-y-1 hover:shadow-lg transition-all duration-300">
+                <div className="flex justify-between items-start mb-4">
+                    <div className="bg-red-50 p-3 rounded-lg border border-red-100">
+                        <span className="text-xl font-bold text-primary">{app.name.charAt(0).toUpperCase()}</span>
+                    </div>
+                    <div className="flex gap-2">
+                        <button onClick={() => handleDelete(app.id)} className="text-gray-300 hover:text-red-600 transition-colors">
+                            <Trash2 size={18} />
+                        </button>
+                    </div>
                 </div>
-                <div className="flex gap-2">
-                     <button onClick={() => handleDelete(app.id)} className="text-gray-400 hover:text-red-600 transition-colors">
-                        <Trash2 size={18} />
-                     </button>
+                <h3 className="text-lg font-bold text-primary mb-1">{app.name}</h3>
+                {app.url && (
+                    <a href={app.url} target="_blank" rel="noreferrer" className="text-sm text-gray-500 hover:text-primary flex items-center gap-1 mb-4 truncate">
+                    <ExternalLink size={14} />
+                    {app.url}
+                    </a>
+                )}
+                <Link href={`/app/${app.id}`}>
+                    <Button variant="secondary" className="w-full mt-4 text-sm hover:bg-gray-50 border-gray-200">
+                    View Credentials
+                    </Button>
+                </Link>
                 </div>
-              </div>
-              <h3 className="text-lg font-bold text-gray-900 mb-1">{app.name}</h3>
-              {app.url && (
-                <a href={app.url} target="_blank" rel="noreferrer" className="text-sm text-gray-500 hover:text-primary flex items-center gap-1 mb-4 truncate">
-                  <ExternalLink size={14} />
-                  {app.url}
-                </a>
-              )}
-              <Link href={`/app/${app.id}`}>
-                <Button variant="secondary" className="w-full mt-4">
-                  View Credentials
-                </Button>
-              </Link>
-            </div>
-          ))}
+            ))}
 
-          {apps.length === 0 && (
-            <div className="col-span-full text-center py-12 text-gray-500 bg-white rounded-xl border border-dashed border-gray-300">
-                <p>No applications found. Create one to get started.</p>
+            {apps.length === 0 && (
+                <div className="col-span-full text-center py-12 text-gray-500 bg-white rounded-xl border border-dashed border-gray-300 shadow-sm">
+                    <p>No applications found. Create one to get started.</p>
+                </div>
+            )}
             </div>
-          )}
         </div>
       </main>
 

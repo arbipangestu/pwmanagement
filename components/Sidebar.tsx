@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, LogOut } from 'lucide-react';
+import { LayoutDashboard, LogOut, User, Settings } from 'lucide-react';
 import { signOut } from 'next-auth/react';
 import { clsx } from 'clsx';
 
@@ -9,12 +9,14 @@ export default function Sidebar() {
 
   const links = [
     { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
+    { name: 'Profile', href: '/profile', icon: User },
+    { name: 'Settings', href: '/settings', icon: Settings },
   ];
 
   return (
-    <div className="w-64 bg-surface h-screen border-r border-gray-200 flex flex-col shadow-sm fixed left-0 top-0">
-      <div className="p-6 border-b border-gray-100">
-        <h1 className="text-2xl font-bold text-primary">PassManager</h1>
+    <div className="w-64 bg-primary h-screen flex flex-col shadow-xl fixed left-0 top-0 text-white">
+      <div className="p-6 border-b border-red-700/30">
+        <h1 className="text-2xl font-bold tracking-tight">PassManager</h1>
       </div>
       <nav className="flex-1 p-4 space-y-2">
         {links.map((link) => {
@@ -25,25 +27,25 @@ export default function Sidebar() {
               key={link.href}
               href={link.href}
               className={clsx(
-                "flex items-center gap-3 px-4 py-3 rounded-lg transition-colors",
+                "flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200",
                 isActive
-                  ? "bg-primary text-white shadow-md"
-                  : "text-gray-600 hover:bg-primary-light hover:text-primary"
+                  ? "bg-primary-hover shadow-inner"
+                  : "hover:bg-primary-hover"
               )}
             >
-              <Icon size={20} />
+              <Icon size={20} className="text-white" />
               <span className="font-medium">{link.name}</span>
             </Link>
           );
         })}
       </nav>
-      <div className="p-4 border-t border-gray-100">
+      <div className="p-4 border-t border-red-700/30">
         <button
           onClick={() => signOut({ callbackUrl: '/login' })}
-          className="flex items-center gap-3 px-4 py-3 w-full text-left text-gray-600 hover:bg-red-50 hover:text-red-600 rounded-lg transition-colors"
+          className="flex items-center gap-3 px-4 py-3 w-full text-left hover:bg-[#C62828] rounded-lg transition-colors"
         >
           <LogOut size={20} />
-          <span className="font-medium">Sign Out</span>
+          <span className="font-medium">Logout</span>
         </button>
       </div>
     </div>
