@@ -14,40 +14,38 @@ export default function Sidebar() {
   ];
 
   return (
-    <div className="w-64 bg-primary h-screen flex flex-col shadow-xl fixed left-0 top-0 text-white">
-      <div className="p-6 border-b border-red-700/30">
-        <h1 className="text-2xl font-bold tracking-tight">PassManager</h1>
+    <div className="h-16 bg-gradient-to-r from-primary to-primary-dark text-highlight-white flex items-center justify-between px-6 shadow-lg fixed top-0 left-0 right-0 z-50">
+      <div className="flex items-center gap-4">
+        <h1 className="text-2xl font-bold">PassManager</h1>
+        <nav className="flex space-x-4">
+          {links.map((link) => {
+            const Icon = link.icon;
+            const isActive = pathname === link.href;
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={clsx(
+                  "flex items-center gap-2 px-3 py-2 rounded-md transition-colors",
+                  isActive
+                    ? "bg-primary-dark text-highlight-gold shadow-md"
+                    : "text-highlight-white/80 hover:bg-primary-dark/70 hover:text-highlight-gold"
+                )}
+              >
+                <Icon size={20} />
+                <span className="font-medium">{link.name}</span>
+              </Link>
+            );
+          })}
+        </nav>
       </div>
-      <nav className="flex-1 p-4 space-y-2">
-        {links.map((link) => {
-          const Icon = link.icon;
-          const isActive = pathname === link.href;
-          return (
-            <Link
-              key={link.href}
-              href={link.href}
-              className={clsx(
-                "flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200",
-                isActive
-                  ? "bg-primary-hover shadow-inner"
-                  : "hover:bg-primary-hover"
-              )}
-            >
-              <Icon size={20} className="text-white" />
-              <span className="font-medium">{link.name}</span>
-            </Link>
-          );
-        })}
-      </nav>
-      <div className="p-4 border-t border-red-700/30">
-        <button
-          onClick={() => signOut({ callbackUrl: '/login' })}
-          className="flex items-center gap-3 px-4 py-3 w-full text-left hover:bg-[#C62828] rounded-lg transition-colors"
-        >
-          <LogOut size={20} />
-          <span className="font-medium">Logout</span>
-        </button>
-      </div>
+      <button
+        onClick={() => signOut({ callbackUrl: '/login' })}
+        className="flex items-center gap-2 px-3 py-2 text-left text-highlight-white/80 hover:bg-primary-dark/70 hover:text-highlight-gold rounded-md transition-colors"
+      >
+        <LogOut size={20} />
+        <span className="font-medium">Sign Out</span>
+      </button>
     </div>
   );
 }

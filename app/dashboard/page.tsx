@@ -1,18 +1,19 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
-import { Plus, ExternalLink, Trash2 } from 'lucide-react';
-import Link from 'next/link';
+import { Plus } from 'lucide-react';
 import Sidebar from '@/components/Sidebar';
 import Button from '@/components/Button';
 import Modal from '@/components/Modal';
 import Input from '@/components/Input';
+import AppCard from '@/components/AppCard';
 import { redirect } from 'next/navigation';
 
 interface AppData {
-  id: number;
+  id: string;
   name: string;
-  url?: string;
+  url: string;
+  type: 'website' | 'desktop' | 'mobile';
 }
 
 export default function Dashboard() {
@@ -20,7 +21,7 @@ export default function Dashboard() {
   const [apps, setApps] = useState<AppData[]>([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [newApp, setNewApp] = useState({ name: '', url: '' });
+  const [newApp, setNewApp] = useState({ name: '', url: '', type: 'website' as 'website' | 'desktop' | 'mobile' });
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
@@ -51,7 +52,7 @@ export default function Dashboard() {
       });
       if (res.ok) {
         setIsModalOpen(false);
-        setNewApp({ name: '', url: '' });
+        setNewApp({ name: '', url: '', type: 'website' });
         fetchApps();
       }
     } finally {
@@ -72,14 +73,13 @@ export default function Dashboard() {
   if (status === 'loading' || loading) return <div className="flex h-screen items-center justify-center bg-gray-soft text-primary font-bold">Loading...</div>;
 
   return (
-    <div className="flex min-h-screen bg-gray-soft">
+    <div className="flex min-h-screen bg-background pt-16"> {/* Added pt-16 for fixed header */}
       <Sidebar />
-      <main className="ml-64 flex-1">
-        {/* Header */}
-        <div className="bg-white shadow-sm border-b border-gray-100 px-8 py-6 flex justify-between items-center sticky top-0 z-10">
+      <main className="flex-1 p-8">
+        <div className="flex justify-between items-center mb-8">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
-            <p className="text-gray-500 text-sm mt-0.5">Manage your applications</p>
+            <h1 className="text-3xl font-bold text-secondary">Dashboard</h1>
+            <p className="text-secondary-charcoal mt-1">Manage your applications</p>
           </div>
           <Button
             onClick={() => setIsModalOpen(true)}
@@ -90,40 +90,14 @@ export default function Dashboard() {
           </Button>
         </div>
 
-        <div className="p-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {apps.map((app) => (
-                <div key={app.id} className="bg-white rounded-xl shadow-sm border border-gray-100/50 p-6 hover:-translate-y-1 hover:shadow-lg transition-all duration-300">
-                <div className="flex justify-between items-start mb-4">
-                    <div className="bg-red-50 p-3 rounded-lg border border-red-100">
-                        <span className="text-xl font-bold text-primary">{app.name.charAt(0).toUpperCase()}</span>
-                    </div>
-                    <div className="flex gap-2">
-                        <button onClick={() => handleDelete(app.id)} className="text-gray-300 hover:text-red-600 transition-colors">
-                            <Trash2 size={18} />
-                        </button>
-                    </div>
-                </div>
-                <h3 className="text-lg font-bold text-primary mb-1">{app.name}</h3>
-                {app.url && (
-                    <a href={app.url} target="_blank" rel="noreferrer" className="text-sm text-gray-500 hover:text-primary flex items-center gap-1 mb-4 truncate">
-                    <ExternalLink size={14} />
-                    {app.url}
-                    </a>
-                )}
-                <Link href={`/app/${app.id}`}>
-                    <Button variant="secondary" className="w-full mt-4 text-sm hover:bg-gray-50 border-gray-200">
-                    View Credentials
-                    </Button>
-                </Link>
-                </div>
-            ))}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {apps.map((app) => (
+            <AppCard key={app.id} app={app} />
+          ))}
 
-            {apps.length === 0 && (
-                <div className="col-span-full text-center py-12 text-gray-500 bg-white rounded-xl border border-dashed border-gray-300 shadow-sm">
-                    <p>No applications found. Create one to get started.</p>
-                </div>
-            )}
+          {apps.length === 0 && (
+            <div className="col-span-full text-center py-12 text-secondary-charcoal bg-highlight-white rounded-xl border border-dashed border-secondary-charcoal/30">
+                <p>No applications found. Create one to get started.</p>
             </div>
         </div>
       </main>
@@ -138,11 +112,26 @@ export default function Dashboard() {
             placeholder="e.g. Netflix"
           />
           <Input
-            label="URL (Optional)"
+            label="URL"
             value={newApp.url}
             onChange={(e) => setNewApp({...newApp, url: e.target.value})}
+            required
             placeholder="https://netflix.com"
           />
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-secondary-charcoal mb-2">Application Type</label>
+            <select
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-primary-DEFAULT focus:border-primary-DEFAULT"
+              value={newApp.type}
+              onChange={(e) => setNewApp({...newApp, type: e.target.value as 'website' | 'desktop' | 'mobile'})}
+              required
+            >
+              <option value="">Select Type</option>
+              <option value="website">Website</option>
+              <option value="desktop">Desktop App</option>
+              <option value="mobile">Mobile App</option>
+            </select>
+          </div>
           <div className="flex justify-end gap-3 mt-6">
             <Button type="button" variant="secondary" onClick={() => setIsModalOpen(false)}>Cancel</Button>
             <Button type="submit" isLoading={submitting}>Create App</Button>

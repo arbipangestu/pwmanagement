@@ -89,33 +89,22 @@ export default function RegisterPage() {
             required
             placeholder="••••••••"
           />
-          <Input
-            label="Confirm Password"
-            type="password"
-            value={formData.confirmPassword}
-            onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
-            required
-            placeholder="••••••••"
-          />
-          <div className="pt-4">
-            <Button
-                type="submit"
-                className="w-full hover:scale-105 transition-transform duration-200"
-                isLoading={loading}
-            >
-                Register
-            </Button>
-          </div>
+          {formData.password && (
+            <p className="text-sm text-secondary-charcoal mt-2">
+              {formData.password.length >= 8 ? 'Strong password' : 'Weak password'}
+            </p>
+          )}
+          <Button type="submit" className="w-full mt-2" isLoading={loading}>
+            Register
+          </Button>
         </form>
 
-        <div className="mt-8 pt-6 border-t border-gray-100 text-center">
-          <p className="text-sm text-gray-600">
-            Already have an account?{' '}
-            <Link href="/login" className="text-primary font-medium hover:text-primary-hover hover:underline">
-              Sign In
-            </Link>
-          </p>
-        </div>
+        <p className="mt-6 text-center text-sm text-secondary-charcoal">
+          Already have an account?{' '}
+          <Link href="/login" className="text-primary-DEFAULT hover:underline font-medium">
+            Sign In
+          </Link>
+        </p>
       </div>
     </div>
   );

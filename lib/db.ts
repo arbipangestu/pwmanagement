@@ -12,9 +12,11 @@ if (!process.env.DATABASE_URL) {
   console.log('Initializing DB Pool with provided DATABASE_URL...');
   pool = new Pool({
     connectionString: process.env.DATABASE_URL,
-    ssl: {
-      rejectUnauthorized: false, // Required for Neon.tech
-    },
+    ...(process.env.DATABASE_SSL_ENABLED === 'true' ? {
+      ssl: {
+        rejectUnauthorized: false, // Required for Neon.tech or other SSL-enabled databases
+      },
+    } : {}),
     // Add timeouts to fail faster if DB is unreachable
     connectionTimeoutMillis: 5000,
     idleTimeoutMillis: 30000,
