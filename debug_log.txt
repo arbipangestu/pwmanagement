@@ -1,0 +1,13 @@
+
+> app@0.1.0 dev
+> next dev
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+
+=======
+>>>>>>> origin/main
+=======
+>>>>>>> origin/main
+=======
+>>>>>>> origin/main
