@@ -1,13 +1,14 @@
 'use client';
 import { useState } from 'react';
+import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Input from '@/components/Input';
 import Button from '@/components/Button';
 import Link from 'next/link';
 
-export default function RegisterPage() {
+export default function LoginPageContent() {
   const router = useRouter();
-  const [formData, setFormData] = useState({ name: '', email: '', password: '' });
+  const [formData, setFormData] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -17,19 +18,16 @@ export default function RegisterPage() {
     setError('');
 
     try {
-      const res = await fetch('/api/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+      const res = await signIn('credentials', {
+        ...formData,
+        redirect: false,
       });
 
-      const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data.error || 'Registration failed');
+      if (res?.error) {
+        setError(res.error);
+      } else {
+        router.push('/dashboard');
       }
-
-      router.push('/login');
     } catch (err: unknown) {
       if (err instanceof Error) {
         setError(err.message);
@@ -45,8 +43,8 @@ export default function RegisterPage() {
     <div className="min-h-screen flex items-center justify-center bg-highlight-white">
       <div className="max-w-md w-full bg-form-background p-8 rounded-2xl shadow-xl border border-form-border text-secondary-DEFAULT">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-secondary-DEFAULT mb-2">Create Account</h1>
-          <p className="text-secondary-charcoal">Start managing your credentials securely</p>
+          <h1 className="text-3xl font-bold text-secondary-DEFAULT mb-2">Welcome Back!</h1>
+          <p className="text-secondary-charcoal">Sign in to manage your credentials</p>
         </div>
 
         {error && (
@@ -56,13 +54,6 @@ export default function RegisterPage() {
         )}
 
         <form onSubmit={handleSubmit}>
-          <Input
-            label="Name"
-            value={formData.name}
-            onChange={(e) => setFormData({...formData, name: e.target.value})}
-            required
-            placeholder="John Doe"
-          />
           <Input
             label="Email"
             type="email"
@@ -79,20 +70,15 @@ export default function RegisterPage() {
             required
             placeholder="••••••••"
           />
-          {formData.password && (
-            <p className="text-sm text-secondary-charcoal mt-2">
-              {formData.password.length >= 8 ? 'Strong password' : 'Weak password'}
-            </p>
-          )}
           <Button type="submit" className="w-full mt-2" isLoading={loading}>
-            Register
+            Sign In
           </Button>
         </form>
 
         <p className="mt-6 text-center text-sm text-secondary-charcoal">
-          Already have an account?{' '}
-          <Link href="/login" className="text-primary-DEFAULT hover:underline font-medium">
-            Sign In
+          Don't have an account?{' '}
+          <Link href="/register" className="text-primary-DEFAULT hover:underline font-medium">
+            Register
           </Link>
         </p>
       </div>

@@ -10,12 +10,24 @@ const config: Config = {
     extend: {
       colors: {
         primary: {
-          DEFAULT: "#C70039", // Elegant Red
-          hover: "#A0002D",
-          light: "#FADBD8",
+          DEFAULT: "#d32f2f", // Japfa Red for buttons
+          dark: "#b71c1c", // Darker red for hover
+          accent: "#d32f2f", // Japfa Red for highlights/errors
         },
-        background: "#F8F9FA", // Light Grey for cleanliness
-        surface: "#FFFFFF",
+        secondary: {
+          DEFAULT: "#171717", // Black for main text
+          charcoal: "#424242", // Dark gray for secondary text
+        },
+        success: {
+          DEFAULT: "#388e3c", // Japfa Green for success
+        },
+        form: {
+          background: "#e8f5e9", // Light green for form background
+          border: "#bdbdbd", // Gray for form border
+        },
+        highlight: {
+          white: "#ffffff", // White for general background
+        },
       },
     },
   },

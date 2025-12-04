@@ -82,18 +82,18 @@ export default function AppDetails() {
   if (loading || !data) return <div className="flex h-screen items-center justify-center">Loading...</div>;
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
+    <div className="flex min-h-screen bg-background pt-16"> {/* Added pt-16 for fixed header */}
       <Sidebar />
-      <main className="ml-64 flex-1 p-8">
-        <Link href="/dashboard" className="flex items-center gap-2 text-gray-500 hover:text-primary mb-6 transition-colors">
+      <main className="flex-1 p-8">
+        <Link href="/dashboard" className="flex items-center gap-2 text-secondary-charcoal hover:text-primary-accent mb-6 transition-colors">
             <ArrowLeft size={18} />
             Back to Dashboard
         </Link>
 
         <div className="flex justify-between items-center mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">{data.application.name}</h1>
-            <p className="text-gray-500 mt-1">Manage credentials for this application</p>
+            <h1 className="text-3xl font-bold text-secondary">{data.application.name}</h1>
+            <p className="text-secondary-charcoal mt-1">Manage credentials for this application</p>
           </div>
           <Button onClick={() => setIsModalOpen(true)}>
             <Plus size={20} />
@@ -101,39 +101,39 @@ export default function AppDetails() {
           </Button>
         </div>
 
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <div className="bg-highlight-white rounded-xl shadow-lg shadow-secondary/10 border border-secondary-charcoal/20 overflow-hidden">
             <table className="w-full text-left">
-                <thead className="bg-gray-50 border-b border-gray-200">
+                <thead className="bg-secondary/5 border-b border-secondary-charcoal/20">
                     <tr>
-                        <th className="px-6 py-4 font-semibold text-gray-700">Username</th>
-                        <th className="px-6 py-4 font-semibold text-gray-700">Password</th>
-                        <th className="px-6 py-4 font-semibold text-gray-700 text-right">Actions</th>
+                        <th className="px-6 py-4 font-semibold text-secondary">Username</th>
+                        <th className="px-6 py-4 font-semibold text-secondary">Password</th>
+                        <th className="px-6 py-4 font-semibold text-secondary text-right">Actions</th>
                     </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-100">
+                <tbody className="divide-y divide-secondary-charcoal/10">
                     {data.credentials.map((cred) => (
-                        <tr key={cred.id} className="hover:bg-gray-50/50">
-                            <td className="px-6 py-4 font-medium text-gray-900">
+                        <tr key={cred.id} className="hover:bg-secondary/5">
+                            <td className="px-6 py-4 font-medium text-secondary">
                                 <div className="flex items-center gap-2">
                                     {cred.username}
-                                    <button onClick={() => copyToClipboard(cred.username)} className="text-gray-400 hover:text-primary" title="Copy Username">
+                                    <button onClick={() => copyToClipboard(cred.username)} className="text-secondary-charcoal hover:text-primary-accent" title="Copy Username">
                                         <Copy size={14} />
                                     </button>
                                 </div>
                             </td>
-                            <td className="px-6 py-4 text-gray-600 font-mono">
+                            <td className="px-6 py-4 text-secondary-charcoal font-mono">
                                 <div className="flex items-center gap-2">
                                     {visiblePasswords[cred.id] ? cred.password : '••••••••••••'}
-                                    <button onClick={() => toggleVisibility(cred.id)} className="text-gray-400 hover:text-primary">
+                                    <button onClick={() => toggleVisibility(cred.id)} className="text-secondary-charcoal hover:text-primary-accent">
                                         {visiblePasswords[cred.id] ? <EyeOff size={16} /> : <Eye size={16} />}
                                     </button>
-                                    <button onClick={() => copyToClipboard(cred.password)} className="text-gray-400 hover:text-primary" title="Copy Password">
+                                    <button onClick={() => copyToClipboard(cred.password)} className="text-secondary-charcoal hover:text-primary-accent" title="Copy Password">
                                         <Copy size={14} />
                                     </button>
                                 </div>
                             </td>
                             <td className="px-6 py-4 text-right">
-                                <button onClick={() => handleDelete(cred.id)} className="text-gray-400 hover:text-red-600 transition-colors p-2">
+                                <button onClick={() => handleDelete(cred.id)} className="text-secondary-charcoal hover:text-primary-accent transition-colors p-2">
                                     <Trash2 size={18} />
                                 </button>
                             </td>
@@ -141,7 +141,7 @@ export default function AppDetails() {
                     ))}
                     {data.credentials.length === 0 && (
                         <tr>
-                            <td colSpan={3} className="px-6 py-12 text-center text-gray-500">
+                            <td colSpan={3} className="px-6 py-12 text-center text-secondary-charcoal">
                                 No credentials found. Add one to get started.
                             </td>
                         </tr>
