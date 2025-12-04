@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, LogOut } from 'lucide-react';
+import { LayoutDashboard, LogOut, User, Settings } from 'lucide-react';
 import { signOut } from 'next-auth/react';
 import { clsx } from 'clsx';
 
@@ -9,6 +9,8 @@ export default function Sidebar() {
 
   const links = [
     { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
+    { name: 'Profile', href: '/profile', icon: User },
+    { name: 'Settings', href: '/settings', icon: Settings },
   ];
 
   return (

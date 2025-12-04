@@ -70,7 +70,7 @@ export default function Dashboard() {
     }
   };
 
-  if (status === 'loading' || loading) return <div className="flex h-screen items-center justify-center">Loading...</div>;
+  if (status === 'loading' || loading) return <div className="flex h-screen items-center justify-center bg-gray-soft text-primary font-bold">Loading...</div>;
 
   return (
     <div className="flex min-h-screen bg-background pt-16"> {/* Added pt-16 for fixed header */}
@@ -81,7 +81,10 @@ export default function Dashboard() {
             <h1 className="text-3xl font-bold text-secondary">Dashboard</h1>
             <p className="text-secondary-charcoal mt-1">Manage your applications</p>
           </div>
-          <Button onClick={() => setIsModalOpen(true)}>
+          <Button
+            onClick={() => setIsModalOpen(true)}
+            className="hover:scale-105 transition-transform duration-200"
+          >
             <Plus size={20} />
             Add Application
           </Button>
@@ -96,7 +99,6 @@ export default function Dashboard() {
             <div className="col-span-full text-center py-12 text-secondary-charcoal bg-highlight-white rounded-xl border border-dashed border-secondary-charcoal/30">
                 <p>No applications found. Create one to get started.</p>
             </div>
-          )}
         </div>
       </main>
 

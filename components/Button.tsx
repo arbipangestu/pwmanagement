@@ -18,7 +18,7 @@ export default function Button({ children, variant = 'primary', isLoading, class
       disabled={isLoading || props.disabled}
       {...props}
     >
-      {isLoading ? <span className="animate-spin h-4 w-4 border-2 border-current border-t-transparent rounded-full" /> : children}
+      {isLoading ? <span className="animate-spin h-5 w-5 border-2 border-current border-t-transparent rounded-full" /> : children}
     </button>
   );
 }
